@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -41,6 +42,9 @@ public class MainController {
         return "index";
     }
 
+    @RequestMapping("/loginpage")
+    public String login(){return "loginformurl";}
+
     @GetMapping("/callback")
     public ModelAndView callback(String code, String state) {
         ClientUserDetails userDetails = (ClientUserDetails) SecurityContextHolder
@@ -60,7 +64,7 @@ public class MainController {
         log.info("clientUser={}", JSONObject.toJSONString(clientUser));
         return new ModelAndView("redirect:/mainpage");
     }
-    @GetMapping("/mainpage1")
+    @RequestMapping("/mainpage1")
     public ModelAndView mainPage1(){
 
         ClientUserDetails userDetails = (ClientUserDetails) SecurityContextHolder

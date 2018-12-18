@@ -19,6 +19,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
     @Autowired
     UserDetailsService userDetailsService;
+    @Autowired
+    LoginSuccessHandler loginSuccessHandler;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
@@ -27,12 +30,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/", "/index.html")
-                .permitAll().anyRequest()
-                .authenticated().and()
-                .formLogin().and()
-                .logout().permitAll().and()
+        //自定义登陆页，登陆成功后跳转/login
+        http
+                .authorizeRequests().antMatchers("/", "/index.html","/loginpage")
+                .permitAll().anyRequest().authenticated().and()
+                .formLogin().loginPage("/loginpage").successHandler(loginSuccessHandler).loginProcessingUrl("/login").and()
+                //自定义退出
+                .logout().logoutUrl("/loginout").logoutSuccessUrl("/logout").permitAll().and()
                 .csrf().disable();
     }
 
